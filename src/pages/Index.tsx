@@ -67,15 +67,15 @@ const Index = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-4"
+          className="text-center mb-2"
         >
-          <h1 className="text-4xl md:text-5xl font-serif text-rose-600 font-bold">
+          <h1 className="text-3xl md:text-4xl font-serif text-rose-600 font-bold">
             {isAccepted ? "Merveilleux ! ❤️" : isOpen ? "Une surprise pour toi..." : "Tu as reçu un message !"}
           </h1>
         </motion.div>
 
-        {/* Conteneur de l'enveloppe avec une marge supérieure pour laisser la carte monter */}
-        <div className="relative flex flex-col items-center mt-24 sm:mt-32">
+        {/* Conteneur compacté */}
+        <div className="relative flex flex-col items-center mt-16 sm:mt-20">
           <ValentineEnvelope 
             isOpen={isOpen} 
             isAccepted={isAccepted}
@@ -84,21 +84,21 @@ const Index = () => {
             <ValentineCard isAccepted={isAccepted} />
           </ValentineEnvelope>
 
-          {/* Boutons positionnés sous l'enveloppe */}
-          <div className="h-32 flex items-center justify-center mt-8">
+          {/* Boutons remontés */}
+          <div className="h-24 flex items-center justify-center mt-2">
             <AnimatePresence>
               {isOpen && !isAccepted && (
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="flex flex-col sm:flex-row items-center justify-center gap-6"
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex flex-col sm:flex-row items-center justify-center gap-4"
                 >
                   <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={handleAccept}
-                    className="bg-rose-500 text-white px-10 py-4 rounded-full font-bold shadow-xl text-lg z-50"
+                    className="bg-rose-500 text-white px-8 py-3 rounded-full font-bold shadow-lg text-base z-50"
                   >
                     Oui ! ❤️
                   </motion.button>
@@ -106,7 +106,7 @@ const Index = () => {
                   <motion.button
                     animate={{ x: noButtonPos.x, y: noButtonPos.y }}
                     onMouseEnter={handleNoHover}
-                    className="bg-white text-rose-300 px-8 py-3 rounded-full font-semibold border border-rose-100 shadow-sm cursor-default"
+                    className="bg-white text-rose-300 px-6 py-2 rounded-full font-semibold border border-rose-100 shadow-sm cursor-default text-sm"
                   >
                     Non 💔
                   </motion.button>
@@ -117,7 +117,7 @@ const Index = () => {
         </div>
       </main>
 
-      <div className="fixed bottom-4 w-full">
+      <div className="fixed bottom-2 w-full">
         <MadeWithDyad />
       </div>
     </div>
