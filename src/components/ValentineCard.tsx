@@ -9,12 +9,17 @@ interface ValentineCardProps {
 }
 
 const ValentineCard: React.FC<ValentineCardProps> = ({ isAccepted }) => {
+  // On encode le nom du fichier pour gérer les espaces
+  const photoPath = encodeURI("/WhatsApp Image 2026-02-06 at 22.10.27.jpeg");
+
   return (
     <motion.div
-      className="bg-white rounded-xl shadow-xl border border-rose-100 p-4 text-center relative overflow-hidden min-h-[240px] flex flex-col items-center justify-center"
+      className={`bg-white rounded-2xl shadow-2xl border border-rose-100 p-6 text-center relative overflow-hidden flex flex-col items-center justify-center ${
+        isAccepted ? 'min-h-[400px]' : 'min-h-[220px]'
+      }`}
       layout
     >
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
 
       <AnimatePresence mode="wait">
         {!isAccepted ? (
@@ -23,21 +28,21 @@ const ValentineCard: React.FC<ValentineCardProps> = ({ isAccepted }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="space-y-3"
+            className="space-y-4"
           >
-            <div className="w-20 h-20 mx-auto rounded-full overflow-hidden border-4 border-rose-50 shadow-sm">
+            <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 border-rose-50 shadow-md">
               <img 
                 src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=500&auto=format&fit=crop" 
-                alt="Toi et Moi"
+                alt="Décoration"
                 className="w-full h-full object-cover"
               />
             </div>
             
-            <div className="space-y-1">
-              <h2 className="text-lg font-serif text-rose-600 font-bold">
+            <div className="space-y-2">
+              <h2 className="text-xl font-serif text-rose-600 font-bold">
                 Ma Valentine...
               </h2>
-              <p className="text-rose-800 font-bold text-sm leading-tight">
+              <p className="text-rose-800 font-bold text-base leading-tight">
                 Veux-tu être ma Valentine ?
               </p>
             </div>
@@ -45,32 +50,39 @@ const ValentineCard: React.FC<ValentineCardProps> = ({ isAccepted }) => {
         ) : (
           <motion.div
             key="success"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="py-2 space-y-3 w-full"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full space-y-6"
           >
-            <div className="relative w-32 h-32 mx-auto">
+            <div className="relative w-full aspect-square max-w-[280px] mx-auto">
               <motion.div 
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.3, type: "spring" }}
-                className="absolute -top-2 -right-2 z-10 bg-white rounded-full p-1 shadow-md"
+                initial={{ scale: 0, rotate: -20 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ delay: 0.5, type: "spring" }}
+                className="absolute -top-4 -right-4 z-20 bg-white rounded-full p-2 shadow-xl border-2 border-rose-100"
               >
-                <Heart className="text-rose-500 fill-rose-500" size={20} />
+                <Heart className="text-rose-500 fill-rose-500" size={32} />
               </motion.div>
-              <div className="w-full h-full rounded-2xl overflow-hidden border-4 border-rose-100 shadow-lg">
+              
+              <div className="w-full h-full rounded-3xl overflow-hidden border-8 border-white shadow-2xl transform rotate-2">
                 <img 
-                  src="/WhatsApp Image 2026-02-06 at 22.10.27.jpeg" 
+                  src={photoPath} 
                   alt="Nous"
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    console.error("Erreur de chargement de l'image");
+                    // Fallback si l'image ne charge vraiment pas
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=500&auto=format&fit=crop";
+                  }}
                 />
               </div>
             </div>
-            <div className="space-y-1">
-              <h2 className="text-2xl font-serif text-rose-600 font-bold">
-                Merveilleux !
-              </h2>
-              <p className="text-rose-500 font-medium">
+
+            <div className="space-y-2">
+              <p className="text-rose-500 font-serif italic text-xl">
+                "Pour toujours..."
+              </p>
+              <p className="text-rose-600 font-bold text-2xl">
                 Je t'aime. ❤️
               </p>
             </div>

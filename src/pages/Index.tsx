@@ -20,7 +20,7 @@ const Index = () => {
 
   const handleAccept = () => {
     setIsAccepted(true);
-    const duration = 4 * 1000;
+    const duration = 5 * 1000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
 
@@ -39,14 +39,14 @@ const Index = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-rose-50 via-white to-pink-50 overflow-hidden p-4">
       {/* Background Decorations */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {[...Array(15)].map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 1000 }}
             animate={{ 
-              opacity: [0.1, 0.3, 0.1],
+              opacity: [0.1, 0.4, 0.1],
               y: -200,
-              x: Math.random() * 1000,
+              x: Math.random() * window.innerWidth,
               rotate: 360
             }}
             transition={{ 
@@ -56,65 +56,82 @@ const Index = () => {
             }}
             className="absolute text-rose-200"
           >
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
           </motion.div>
         ))}
       </div>
 
-      <main className="relative z-10 flex flex-col items-center justify-center w-full max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-2"
-        >
-          <h1 className="text-3xl md:text-4xl font-serif text-rose-600 font-bold">
-            {isAccepted ? "Merveilleux ! ❤️" : isOpen ? "Une surprise pour toi..." : "Tu as reçu un message !"}
-          </h1>
-        </motion.div>
+      <main className="relative z-10 flex flex-col items-center justify-center w-full max-w-lg">
+        <AnimatePresence mode="wait">
+          {!isAccepted ? (
+            <motion.div
+              key="envelope-view"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col items-center"
+            >
+              <motion.h1 
+                className="text-3xl md:text-4xl font-serif text-rose-600 font-bold text-center mb-8"
+              >
+                {isOpen ? "Une surprise pour toi..." : "Tu as reçu un message !"}
+              </motion.h1>
 
-        {/* Conteneur compacté */}
-        <div className="relative flex flex-col items-center mt-16 sm:mt-20">
-          <ValentineEnvelope 
-            isOpen={isOpen} 
-            isAccepted={isAccepted}
-            onOpen={() => setIsOpen(true)}
-          >
-            <ValentineCard isAccepted={isAccepted} />
-          </ValentineEnvelope>
+              <ValentineEnvelope 
+                isOpen={isOpen} 
+                isAccepted={false}
+                onOpen={() => setIsOpen(true)}
+              >
+                <ValentineCard isAccepted={false} />
+              </ValentineEnvelope>
 
-          {/* Boutons remontés */}
-          <div className="h-24 flex items-center justify-center mt-2">
-            <AnimatePresence>
-              {isOpen && !isAccepted && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="flex flex-col sm:flex-row items-center justify-center gap-4"
-                >
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleAccept}
-                    className="bg-rose-500 text-white px-8 py-3 rounded-full font-bold shadow-lg text-base z-50"
+              <div className="h-24 flex items-center justify-center mt-4">
+                {isOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-col sm:flex-row items-center justify-center gap-6"
                   >
-                    Oui ! ❤️
-                  </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={handleAccept}
+                      className="bg-rose-500 text-white px-10 py-4 rounded-full font-bold shadow-xl text-lg z-50 hover:bg-rose-600 transition-colors"
+                    >
+                      Oui ! ❤️
+                    </motion.button>
 
-                  <motion.button
-                    animate={{ x: noButtonPos.x, y: noButtonPos.y }}
-                    onMouseEnter={handleNoHover}
-                    className="bg-white text-rose-300 px-6 py-2 rounded-full font-semibold border border-rose-100 shadow-sm cursor-default text-sm"
-                  >
-                    Non 💔
-                  </motion.button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
+                    <motion.button
+                      animate={{ x: noButtonPos.x, y: noButtonPos.y }}
+                      onMouseEnter={handleNoHover}
+                      className="bg-white text-rose-300 px-6 py-2 rounded-full font-semibold border border-rose-100 shadow-sm cursor-default text-sm"
+                    >
+                      Non 💔
+                    </motion.button>
+                  </motion.div>
+                )}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="success-view"
+              initial={{ opacity: 0, scale: 0.5, y: 50 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ type: "spring", damping: 12, stiffness: 100 }}
+              className="w-full flex flex-col items-center"
+            >
+              <h1 className="text-4xl md:text-5xl font-serif text-rose-600 font-bold text-center mb-8 drop-shadow-sm">
+                Merveilleux ! ❤️
+              </h1>
+              <div className="w-full max-w-sm">
+                <ValentineCard isAccepted={true} />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
 
       <div className="fixed bottom-2 w-full">
